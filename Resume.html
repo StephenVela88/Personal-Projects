@@ -1,0 +1,235 @@
+import os
+from weasyprint import HTML
+from pypdf import PdfReader
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stephen Vela - Resume</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        @page {
+            size: A4;
+            margin: 14mm 15mm;
+            background-color: #0a192f;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: #0a192f;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 24pt;
+            color: #ff7700;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+        .contact-info {
+            font-size: 9.5pt;
+            color: #e2e8f0;
+        }
+        .contact-info span {
+            margin: 0 6px;
+            color: #ff7700;
+        }
+        h2 {
+            font-size: 12pt;
+            color: #ff7700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 12px 0 6px 0;
+            border-bottom: 1.5px solid #ff7700;
+            padding-bottom: 3px;
+        }
+        p {
+            margin: 0 0 6px 0;
+        }
+        .section-content {
+            margin-bottom: 8px;
+        }
+        .job-header, .edu-header {
+            width: 100%;
+            margin-bottom: 3px;
+            border-collapse: collapse;
+        }
+        .job-header td, .edu-header td {
+            padding: 0;
+            vertical-align: bottom;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 10.5pt;
+            color: #ffffff;
+        }
+        .org {
+            font-style: italic;
+            color: #cbd5e1;
+        }
+        .date-loc {
+            text-align: right;
+            font-size: 9.5pt;
+            color: #ff7700;
+            font-weight: bold;
+        }
+        ul {
+            margin: 4px 0 8px 0;
+            padding-left: 18px;
+        }
+        li {
+            margin-bottom: 3px;
+        }
+        .skills-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+        .skills-table td {
+            padding: 3px 0;
+            vertical-align: top;
+        }
+        .skill-category {
+            font-weight: bold;
+            color: #ff7700;
+            width: 25%;
+        }
+        .skill-list {
+            color: #ffffff;
+            width: 75%;
+        }
+        .cert-list {
+            margin: 4px 0 0 0;
+            padding-left: 18px;
+        }
+        .cert-list li {
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Stephen Vela</h1>
+        <div class="contact-info">
+            stephen.vela@cybersec-example.com <span>|</span> (555) 019-2834 <span>|</span> Austin, TX <span>|</span> linkedin.com/in/stephen-vela-sec
+        </div>
+    </div>
+
+    <h2>Professional Summary</h2>
+    <div class="section-content">
+        <p>Dedicated and detail-oriented Cybersecurity Specialist with over 4 years of experience securing enterprise network architectures and leading incident response initiatives. Proven track record in vulnerability assessment, SIEM monitoring, and proactive threat hunting to protect critical IT assets against sophisticated cyber attacks and unauthorized access.</p>
+    </div>
+
+    <h2>Skills</h2>
+    <div class="section-content">
+        <table class="skills-table">
+            <tr>
+                <td class="skill-category">Technical Skills:</td>
+                <td class="skill-list">Network Security, Threat Hunting, Incident Response, Vulnerability Assessment, Firewall Configuration, Malware Analysis, Penetration Testing Basics</td>
+            </tr>
+            <tr>
+                <td class="skill-category">Security Tools:</td>
+                <td class="skill-list">Splunk, Wireshark, Nessus, CrowdStrike Falcon, Metasploit, Snort, Palo Alto Firewalls, Kali Linux, Nmap</td>
+            </tr>
+            <tr>
+                <td class="skill-category">Languages &amp; OS:</td>
+                <td class="skill-list">Python, Bash scripting, PowerShell, Linux (Red Hat, Ubuntu), Windows Server, TCP/IP networking protocols</td>
+            </tr>
+            <tr>
+                <td class="skill-category">Soft Skills:</td>
+                <td class="skill-list">Analytical Problem Solving, Clear Technical Communication, Cross-Functional Leadership, Crisis Management, Attention to Detail</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Work Experience</h2>
+    <div class="section-content">
+        <table class="job-header">
+            <tr>
+                <td><span class="title">Cybersecurity Analyst</span> <span class="org">| Aegis Network Defense</span></td>
+                <td class="date-loc">June 2023 to Present | Austin, TX</td>
+            </tr>
+        </table>
+        <ul>
+            <li>Monitor enterprise infrastructure using advanced SIEM tools to detect, analyze, and mitigate real-time security alerts across 1,500 endpoint devices.</li>
+            <li>Conduct weekly vulnerability scans using Nessus, identifying critical system weaknesses and collaborating with IT operations to apply patches within 48 hours.</li>
+            <li>Lead containment and eradication procedures during suspected security incidents, reducing mean time to remediation by 25 percent over twelve months.</li>
+            <li>Develop and automate custom Python scripts for log parsing and threat intelligence correlation, significantly streamlining daily SOC operations.</li>
+        </ul>
+
+        <table class="job-header" style="margin-top: 8px;">
+            <tr>
+                <td><span class="title">Junior Security Operations Center (SOC) Analyst</span> <span class="org">| Vanguard Tech Solutions</span></td>
+                <td class="date-loc">January 2021 to May 2023 | Austin, TX</td>
+            </tr>
+        </table>
+        <ul>
+            <li>Investigated Tier 1 and Tier 2 security alerts, performing preliminary triage and escalating severe incidents to senior forensic specialists.</li>
+            <li>Configured and maintained intrusion detection systems (Snort) and firewall access control lists to prevent unauthorized ingress attempts.</li>
+            <li>Assisted in comprehensive security audits and compliance checks to ensure adherence to NIST and ISO 27001 industry frameworks.</li>
+            <li>Authored detailed post-incident reports and technical documentation to improve internal standard operating procedures and team readiness.</li>
+        </ul>
+    </div>
+
+    <h2>Education</h2>
+    <div class="section-content">
+        <table class="edu-header">
+            <tr>
+                <td><span class="title">Bachelor of Science in Cybersecurity</span> <span class="org">| University of Central Texas</span></td>
+                <td class="date-loc">Graduated: December 2020 | Austin, TX</td>
+            </tr>
+        </table>
+        <ul>
+            <li>Coursework Focus: Network Defense, Ethical Hacking, Cryptography, Information Security Governance, and Operating System Security.</li>
+            <li>Capstone Project: Designed a secure, multi-tier cloud network architecture featuring automated intrusion prevention and encrypted data pipelines.</li>
+        </ul>
+    </div>
+
+    <h2>Certifications &amp; Awards</h2>
+    <div class="section-content">
+        <ul class="cert-list">
+            <li><strong>CompTIA Security+ (ce)</strong> - Earned March 2021</li>
+            <li><strong>Certified Ethical Hacker (CEH)</strong> - Earned August 2022</li>
+            <li><strong>CompTIA Network+</strong> - Earned May 2020</li>
+            <li><strong>Employee of the Quarter</strong> - Aegis Network Defense (Q4 2024) for exceptional performance during an enterprise security upgrade.</li>
+        </ul>
+    </div>
+
+    <h2>Volunteer Work</h2>
+    <div class="section-content">
+        <table class="job-header">
+            <tr>
+                <td><span class="title">Community Cyber Hygiene Mentor</span> <span class="org">| Austin Digital Literacy Initiative</span></td>
+                <td class="date-loc">February 2022 to Present</td>
+            </tr>
+        </table>
+        <p style="margin-top: 3px; padding-left: 4px;">Conduct monthly interactive workshops for local small business owners and senior citizens, teaching essential online safety practices, phishing awareness, and password security fundamentals.</p>
+    </div>
+
+</body>
+</html>
+"""
+
+html_path = "stephen_vela_resume.html"
+pdf_path = "Stephen_Vela_CyberSecurity_Resume.pdf"
+
+with open(html_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+HTML(filename=html_path).write_pdf(pdf_path)
+
+# Verify page count
+reader = PdfReader(pdf_path)
+print(f"Total pages: {len(reader.pages)}")
